@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class TokenService {
@@ -26,7 +27,7 @@ public class TokenService {
     }
 
 
-    public Token generateToken() {
+    public Mono<Token> generateToken() {
         String generatedToken = generateTokenValue();
         Token token = new Token();
         token.setToken(generatedToken);
@@ -70,16 +71,16 @@ public class TokenService {
         }
     }
 
-    public Token save(Token token) {
+    public Mono<Token> save(Token token) {
         return repository.save(token);
     }
 
-    public Optional<Token> findById(Long id) {
-        return repository.findById(id);
+    public Mono<Optional<Token>> findById(Long id) {
+        return repository.findById(id).singleOptional();
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public Mono<Void> delete(Long id) {
+        return repository.deleteById(id);
     }
 
 }

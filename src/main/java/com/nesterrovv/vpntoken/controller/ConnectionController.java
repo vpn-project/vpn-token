@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/vpn/token")
@@ -21,17 +22,14 @@ public class ConnectionController {
     private final TokenService tokenService;
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<TokenDto> findTokenById(@PathVariable Long id) {
-        Optional<Token> tokenOptional = tokenService.findById(id);
-        return tokenOptional
-            .map(token -> ResponseEntity.ok(new TokenDto(token.getToken())))
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<ResponseEntity<TokenDto>> findTokenById(@PathVariable Long id) {
+        return tokenService.findById(id)
+            .map(optionalToken -> optionalToken.map(token -> ResponseEntity.ok(new TokenDto(token.getToken()))).orElseGet(() -> ResponseEntity.notFound().build()));
     }
 
     @PostMapping("/generate")
-    public TokenDto generateToken() {
-        Token generatedToken = tokenService.generateToken();
-        return new TokenDto(generatedToken.getToken());
+    public Mono<TokenDto> generateToken() {
+        return tokenService.generateToken().map(token -> new TokenDto(token.getToken()));
     }
 
     @DeleteMapping("/delete/{id}")

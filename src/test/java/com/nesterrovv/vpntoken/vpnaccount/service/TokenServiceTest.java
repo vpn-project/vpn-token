@@ -6,12 +6,14 @@ import static org.mockito.Mockito.*;
 import com.nesterrovv.vpntoken.entity.Token;
 import com.nesterrovv.vpntoken.repository.TokenRepository;
 import com.nesterrovv.vpntoken.service.TokenService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import java.util.Optional;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 class TokenServiceTest {
 
@@ -28,44 +30,35 @@ class TokenServiceTest {
 
     @Test
     void testGenerateToken() {
-        when(tokenRepository.save(any(Token.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Token generatedToken = tokenService.generateToken();
-        assertNotNull(generatedToken);
-        assertNotNull(generatedToken.getToken());
-        verify(tokenRepository, times(1)).save(any(Token.class));
+        when(tokenRepository.save(any(Token.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+        StepVerifier.create(tokenService.generateToken()).assertNext(token -> {
+            assertNotNull(token);
+            assertNotNull(token.getToken());
+            verify(tokenRepository, times(1)).save(any(Token.class));
+        }).verifyComplete();
     }
 
     @Test
     void testSave() {
         Token tokenToSave = new Token();
-        when(tokenRepository.save(tokenToSave)).thenReturn(tokenToSave);
-
-        Token savedToken = tokenService.save(tokenToSave);
-
-        assertNotNull(savedToken);
+        when(tokenRepository.save(tokenToSave)).thenReturn(Mono.just(tokenToSave));
+        StepVerifier.create(tokenService.save(tokenToSave)).assertNext(Assertions::assertNotNull).verifyComplete();
         verify(tokenRepository, times(1)).save(tokenToSave);
     }
 
     @Test
     void testFindById() {
         Long tokenId = 1L;
-        when(tokenRepository.findById(tokenId)).thenReturn(Optional.of(new Token()));
-
-        Optional<Token> foundToken = tokenService.findById(tokenId);
-
-        assertTrue(foundToken.isPresent());
+        when(tokenRepository.findById(tokenId)).thenReturn(Mono.just(new Token()));
+        StepVerifier.create(tokenService.findById(tokenId)).assertNext(token -> assertNotNull(token)).verifyComplete();
         verify(tokenRepository, times(1)).findById(tokenId);
     }
 
     @Test
     void testDelete() {
         Long tokenId = 1L;
-
-        // Mocking repository deleteById method
-        doNothing().when(tokenRepository).deleteById(tokenId);
-
-        tokenService.delete(tokenId);
-
+        when(tokenRepository.deleteById(tokenId)).thenReturn(Mono.empty());
+        StepVerifier.create(tokenService.delete(tokenId)).verifyComplete();
         verify(tokenRepository, times(1)).deleteById(tokenId);
     }
 

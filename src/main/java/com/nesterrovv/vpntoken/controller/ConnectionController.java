@@ -25,11 +25,11 @@ public class ConnectionController {
 
     @GetMapping("/get/{id}")
     @HystrixCommand(fallbackMethod = "fallbackFindTokenById")
-    public Mono<ResponseEntity<TokenDto>> findTokenById(@PathVariable Integer id) {
+    public ResponseEntity<TokenDto> findTokenById(@PathVariable Integer id) {
         return tokenService.findById(id)
             .map(optionalToken -> optionalToken
                 .map(token -> ResponseEntity.ok(new TokenDto(token.getToken()))).orElseGet(() ->
-                    ResponseEntity.notFound().build()));
+                    ResponseEntity.notFound().build())).block();
     }
 
     private Mono<ResponseEntity<TokenDto>> fallbackFindTokenById(Integer id) {
@@ -40,8 +40,8 @@ public class ConnectionController {
 
     @PostMapping("/generate")
     @HystrixCommand(fallbackMethod = "fallbackGenerateToken")
-    public Mono<TokenDto> generateToken() {
-        return tokenService.generateToken().map(token -> new TokenDto(token.getToken()));
+    public TokenDto generateToken() {
+        return tokenService.generateToken().map(token -> new TokenDto(token.getToken())).block();
     }
 
     private Mono<TokenDto> fallbackGenerateToken() {

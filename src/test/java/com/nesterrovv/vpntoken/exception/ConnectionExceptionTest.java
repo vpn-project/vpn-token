@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.exception;
+package com.nesterrovv.vpntoken.exception;
 
 import com.nesterrovv.vpntoken.exception.ConnectionException;
 import org.junit.jupiter.api.Test;

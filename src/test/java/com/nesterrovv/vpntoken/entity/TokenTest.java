@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.entity;
+package com.nesterrovv.vpntoken.entity;
 
 import com.nesterrovv.vpntoken.entity.Token;
 import org.junit.jupiter.api.BeforeEach;

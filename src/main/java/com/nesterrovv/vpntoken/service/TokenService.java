@@ -75,11 +75,11 @@ public class TokenService {
         return repository.save(token);
     }
 
-    public Mono<Optional<Token>> findById(Long id) {
+    public Mono<Optional<Token>> findById(Integer id) {
         return repository.findById(id).singleOptional();
     }
 
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(Integer id) {
         return repository.deleteById(id);
     }
 

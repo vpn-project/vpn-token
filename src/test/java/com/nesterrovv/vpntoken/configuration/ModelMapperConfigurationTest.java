@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.configuration;
+package com.nesterrovv.vpntoken.configuration;
 
 import com.nesterrovv.vpntoken.configuration.ModelMapperConfiguration;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.dto;
+package com.nesterrovv.vpntoken.dto;
 
 import com.nesterrovv.vpntoken.dto.TokenDto;
 import org.junit.jupiter.api.BeforeEach;

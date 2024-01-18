@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.mapper;
+package com.nesterrovv.vpntoken.mapper;
 
 import com.nesterrovv.vpntoken.dto.TokenDto;
 import com.nesterrovv.vpntoken.entity.Token;

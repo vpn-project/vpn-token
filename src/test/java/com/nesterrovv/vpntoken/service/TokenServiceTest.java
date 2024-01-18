@@ -1,4 +1,4 @@
-package com.nesterrovv.vpntoken.vpnaccount.service;
+package com.nesterrovv.vpntoken.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -48,7 +48,7 @@ class TokenServiceTest {
 
     @Test
     void testFindById() {
-        Long tokenId = 1L;
+        Integer tokenId = 1;
         when(tokenRepository.findById(tokenId)).thenReturn(Mono.just(new Token()));
         StepVerifier.create(tokenService.findById(tokenId)).assertNext(token -> assertNotNull(token)).verifyComplete();
         verify(tokenRepository, times(1)).findById(tokenId);
@@ -56,7 +56,7 @@ class TokenServiceTest {
 
     @Test
     void testDelete() {
-        Long tokenId = 1L;
+        Integer tokenId = 1;
         when(tokenRepository.deleteById(tokenId)).thenReturn(Mono.empty());
         StepVerifier.create(tokenService.delete(tokenId)).verifyComplete();
         verify(tokenRepository, times(1)).deleteById(tokenId);

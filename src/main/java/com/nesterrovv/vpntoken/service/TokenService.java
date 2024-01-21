@@ -37,7 +37,7 @@ public class TokenService {
     @SuppressWarnings("HiddenField")
     private String generateTokenValue() {
         try {
-            String curlCommand = "curl --insecure -X POST https://super-secret-link";
+            String curlCommand = "curl --insecure -X POST https://62.84.99.96:17930/Zg2cX83PXEPrJB4sh0yh6w/access-keys";
             ProcessBuilder processBuilder = new ProcessBuilder(curlCommand.split(" "));
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();

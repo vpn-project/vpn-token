@@ -26,7 +26,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(config -> config
                 .requestMatchers("/vpn/api-docs/**").permitAll()
                 .requestMatchers("/vpn/token/**").hasAuthority("USER")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(
                 new JwtFilter(), UsernamePasswordAuthenticationFilter.class

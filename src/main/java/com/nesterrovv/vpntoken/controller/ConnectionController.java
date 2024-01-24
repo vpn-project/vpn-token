@@ -51,7 +51,7 @@ public class ConnectionController {
     @DeleteMapping("/delete/{id}")
     @HystrixCommand(fallbackMethod = "fallbackDeleteToken")
     public void deleteToken(@PathVariable Integer id) {
-        tokenService.delete(id);
+        tokenService.delete(id).block();
     }
 
     private Mono<ResponseEntity<TokenDto>> fallbackDeleteToken(Integer id) {

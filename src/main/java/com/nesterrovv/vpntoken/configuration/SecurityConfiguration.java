@@ -24,7 +24,8 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(config -> config
-                .requestMatchers("/vpn/**").hasAuthority("USER")
+                .requestMatchers("/vpn/api-docs/**").permitAll()
+                .requestMatchers("/vpn/token/**").hasAuthority("USER")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(
